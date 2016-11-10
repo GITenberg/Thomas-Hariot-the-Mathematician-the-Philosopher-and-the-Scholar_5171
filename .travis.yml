@@ -1,0 +1,61 @@
+sudo: required
+dist: trusty
+language: ruby
+
+before_install:
+before_install:
+- gem install asciidoctor -v 1.5.2
+- gem install tilt
+- sudo pip install git+https://github.com/gitenberg-dev/gitberg
+- sudo pip install pillow
+- sudo pip install cssutils
+- sudo pip install docutils
+- sudo pip install roman
+- sudo pip install git+https://github.com/gitenberg-dev/pg-epubmaker
+script:
+- VERSION=`ruby -e "require 'yaml'; meta = YAML.load_file('metadata.yaml'); puts meta['_version'];"`
+- git clone https://github.com/gitenberg-dev/asciidoctor-htmlbook.git
+- sudo pip install -r asciidoctor-htmlbook/gitberg-machine/requirements.txt
+
+- /usr/bin/python -c "from gitenberg import travis; travis.build_epub()"
+- ebook-convert book.epub book.mobi
+- xvfb-run ebook-convert book.epub book.pdf
+branches:
+  only:
+  - master
+notifications:
+  webhooks:
+    urls:
+      - https://unglue.it/api/travisci/webhook
+    on_success: always
+    on_failure: never
+    on_start: never
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: pUwqA5cw6keR4P9lOAZwS6+6CwgpZYm01kA2ebuqruhXYWZpJu3MEdxzeL7z1QBeSPRv5i9bj3kFXG1cBiALbCamOXoMlAXz0Hr9nqjk8Pih1gfqawPX1IRS7YpJ7uc5gup5ScOUzeAulmDJ9C/4YMb/k7A1GR1O9fLR3JL6Pyp1BQO+kg3SBrv98A2gwhBw9og2nBxsX9uJ2P5hHcEhNc7SmdjATV0nqtRQfW3RsL5q8Ovpx07e4uqo+pRzhlh2bdVIjmaT3YIFDR1bsXgerN+7gSxx4EuaLZO/0DWv04yYmuApnSwJvpfvWlU3R1BJsaJRPdaptbGMTmf1/OdqifF1Tz+26D4ECjw8EUG/XeENklF0OSo+AvpoL41pa1YW+ckDt/S9+xSlc6Egctb9CqgupldFNpVcjZ1CbEQtS+mcCrpFvtF34hoQbPFsO94/+aSOozsM1BVOPlrJdEeK+2a1u51i/yPoYjhAhbtmFH8Z78DdfWxj2evmpFTi1eSRdeGEpaUMoGbAxf4jYf4Ec4YBEuUboaDDQq9k35cAJ8B5fYWV0YbwTGx58v8ygeH3wHEgtNgZ5kzF0EJwClnYyy1PXul9gU8XkcgoG9/6Y6NG6rnN5c4AmtLOdoat5r+cmpSH456aXo6zOnNBstQgj7oBHq88C8T5bbvh6+tezbQ=
+  file:
+    - book.epub
+    - book.mobi
+    - book.pdf
+  "on":
+    repo: GITenberg/Thomas-Hariot-the-Mathematician-the-Philosopher-and-the-Scholar_5171
+addons:
+  apt:
+    packages:
+    - xsltproc
+    - xvfb
+    - calibre
+    - python-pip
+    - git
+    - python-dev
+    - libjpeg-dev
+    - libpng-dev
+    - libfreetype6
+    - libfreetype6-dev
+    - zlib1g-dev
+    - python-lxml
+    - libxml2-dev
+    - libxslt1-dev
+    - tidy
