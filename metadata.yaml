@@ -1,5 +1,5 @@
 _repo: Thomas-Hariot-the-Mathematician-the-Philosopher-and-the-Scholar_5171
-_version: 0.2.0
+_version: 0.2.1
 covers:
 - cover_type: generated
   image_path: cover.png
@@ -26,5 +26,6 @@ subjects:
 - !lcc 'F206'
 - !lcsh 'Harriot, Thomas, 1560-1621'
 - !lcsh 'Hercules Club'
+- GITenberg
 title: Thomas Hariot, the Mathematician, the Philosopher and the Scholar
 url: http://www.gutenberg.org/ebooks/5171
